@@ -2,7 +2,8 @@ const USER = require("../models/user");
 const bcrypt = require("bcryptjs");
 const generateToken = require("../helpers/generateToken");
 const { sendWelcomeEmail } = require("../emails/sendEmail");
-
+const jwt = require("jsonwebtoken");
+// handleRegister
 const handleRegister = async (req, res) => {
   const { fullName, email, phoneNumber, password, role } = req.body;
   try {
@@ -47,6 +48,7 @@ const handleRegister = async (req, res) => {
   }
 };
 
+// handleVerify email
 const handleVerifyEmail = async (req, res) => {
   const { token } = req.params;
   try {
@@ -81,4 +83,55 @@ const handleVerifyEmail = async (req, res) => {
   }
 };
 
-module.exports = { handleRegister, handleVerifyEmail };
+// handleLogin
+const handleLogin = async (req, res) => {
+  const { email, password, role } = req.body;
+  if (!email || !password || !role) {
+    return res
+      .status(400)
+      .json({ message: "Email, Password and role are Required" });
+  }
+  try {
+    const user = await USER.findOne({ email });
+    if (!user) {
+      return res
+        .status(401)
+        .json({ message: "Account not Found, Please Register" });
+    }
+    if (user.role !== role) {
+      return res.status(401).json({ message: "Access Denied for this role" });
+    }
+    if (!user.isVerified) {
+      return res
+        .status(403)
+        .json({ message: "Email is not verified, Check your mail" });
+    }
+    const isPasswordCorrect = await bcrypt.compare(password, user.password);
+    if (!isPasswordCorrect) {
+      return res.status(401).json({ message: "Invalid email or Password" });
+    }
+    // generating token
+    const token = jwt.sign(
+      { email: user.email, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "3 days" }
+    );
+
+    return res.status(200).json({
+      success: true,
+      token,
+      user: {
+        fullName: user.fullName,
+        email: user.email,
+        profilePicture: user.profilePicture,
+        role: user.role,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({ message: error.message });
+  }
+};
+
+module.exports = { handleRegister, handleVerifyEmail, handleLogin };
