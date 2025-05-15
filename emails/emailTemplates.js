@@ -55,6 +55,7 @@ const createWelcomeTemplate = (fullName, clientUrl) => {
         <div style="text-align: start; margin: 30px 0">
           <a
             href="${clientUrl}"
+            target="_blank"
             style="
               background-color: #000;
               color: white;
