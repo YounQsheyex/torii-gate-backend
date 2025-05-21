@@ -32,5 +32,11 @@ const sendWelcomeEmail = ({ fullName, clientUrl, email }) => {
 
   sendMail({ to: email, subject, html });
 };
+const sendResetEmail = ({ fullName, clientUrl, email }) => {
+  const subject = "Password Reset";
+  const html = createResetTemplate(fullName, clientUrl);
 
-module.exports = { sendWelcomeEmail };
+  sendMail({ to: email, subject, html });
+};
+
+module.exports = { sendWelcomeEmail, sendResetEmail };
