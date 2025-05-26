@@ -27,7 +27,7 @@ const createWelcomeTemplate = (fullName, clientUrl) => {
       >
         <img
           src="https://res.cloudinary.com/dlb8nbz13/image/upload/v1747040557/logo_fearrd.png"
-          alt="Mb events Logo"
+          alt="Torii Gate"
           style="
             max-width: 50.3px;
             max-height: 43.92px;
@@ -55,7 +55,7 @@ const createWelcomeTemplate = (fullName, clientUrl) => {
         <div style="text-align: start; margin: 30px 0">
           <a
             href="${clientUrl}"
-            target="_blank"
+            target = "_blank"
             style="
               background-color: #000;
               color: white;
@@ -66,7 +66,7 @@ const createWelcomeTemplate = (fullName, clientUrl) => {
               font-size: 16px;
               transition: background-color 0.3s;
             "
-            >Click to verify your email</a
+            >Verify your email</a
           >
         </div>
         <p>
@@ -141,7 +141,7 @@ const createResetTemplate = (fullName, clientUrl) => {
       >
         <h1>You have requested for a password reset from Torii Gate</h1>
         <p>Please go to this link to reset password</p>
-        <a href="${clientUrl}" clicktracking="off">Click To Reset</a>
+        <a href="${clientUrl}" clicktracking="off" target="_blank">Click To Reset</a>
       </div>
 
       <p>
@@ -155,4 +155,4 @@ const createResetTemplate = (fullName, clientUrl) => {
 `;
 };
 
-module.exports = { createWelcomeTemplate, createResetTemplate };
+module.exports = { createResetTemplate, createWelcomeTemplate };
