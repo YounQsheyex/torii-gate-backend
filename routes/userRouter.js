@@ -21,7 +21,7 @@ router.get("/user", handleGetUser);
 router.patch(
   "/user",
   isLoggedIn,
-  requirePermissions(["landlord"]),
+  requirePermissions("landlord"),
   handleUpdateUser
 );
 
