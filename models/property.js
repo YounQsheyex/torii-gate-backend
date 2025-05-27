@@ -15,12 +15,12 @@ const propertySchema = new Schema(
       type: String,
       required: true,
     },
-    bedrooms: {
+    bedroom: {
       type: Number,
       required: true,
       min: 0,
     },
-    livingRooms: {
+    livingRoom: {
       type: Number,
       required: true,
       min: 0,
@@ -48,7 +48,7 @@ const propertySchema = new Schema(
     availability: {
       type: String,
       enum: ["rented", "available"],
-      default: available,
+      default: " available",
     },
     landlord: {
       type: mongoose.Schema.Types.ObjectId,
@@ -58,3 +58,6 @@ const propertySchema = new Schema(
   },
   { timestamps: true }
 );
+
+const PROPERTY = mongoose.model("property", propertySchema);
+module.exports = PROPERTY;

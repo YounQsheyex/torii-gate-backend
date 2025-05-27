@@ -7,6 +7,7 @@ const cloudinary = require("cloudinary").v2;
 const fileUpload = require("express-fileupload");
 const PORT = process.env.PORT || 3000;
 const userRouter = require("./routes/userRouter");
+const propertytRouter = require("./routes/propertyRouter");
 
 // middleware
 app.use(express.json());
@@ -30,6 +31,7 @@ app.get("/", (req, res) => {
   res.status(200).json({ success: true, message: "Torii Gate Serveer" });
 });
 app.use("/api/auth", userRouter);
+app.use("/api/property", propertytRouter);
 
 // error route
 app.use((req, res) => {
