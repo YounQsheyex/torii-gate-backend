@@ -30,6 +30,7 @@ const getLandlordsProperties = async (req, res) => {
       currentPage: parseInt(page),
       totalPages,
       properties,
+      totalProperties,
     });
   } catch (error) {
     console.log(error);
