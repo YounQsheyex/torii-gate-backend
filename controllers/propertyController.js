@@ -14,7 +14,7 @@ const getLandlordsProperties = async (req, res) => {
       .skip(skip)
       .limit(limit);
     const total = await PROPERTY.countDocuments({ landlord: userId });
-    const totalProperties = await PROPERTY.countDocuments(filter);
+
     const totalPages = Math.ceil(total / limit);
     const availableProperties = await PROPERTY.countDocuments({
       landlord: userId,
@@ -31,7 +31,6 @@ const getLandlordsProperties = async (req, res) => {
       currentPage: parseInt(page),
       totalPages,
       properties,
-      totalProperties,
     });
   } catch (error) {
     console.log(error);
@@ -91,6 +90,7 @@ const getAllProperties = async (req, res) => {
       totalPages,
       currentPage: parseInt(page),
       properties,
+      totalProperties,
     });
   } catch (error) {
     console.log(error);
