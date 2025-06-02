@@ -13,7 +13,7 @@ const getLandlordsProperties = async (req, res) => {
       .sort("-createdAt")
       .skip(skip)
       .limit(limit);
-    const total = await PROPERTY.countDocuments({ landlord: userId });
+    const totalProperties = await PROPERTY.countDocuments({ landlord: userId });
     const totalPages = Math.ceil(total / limit);
     const availableProperties = await PROPERTY.countDocuments({
       landlord: userId,
