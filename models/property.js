@@ -48,7 +48,7 @@ const propertySchema = new Schema(
     availability: {
       type: String,
       enum: ["rented", "available"],
-      default: " available",
+      default: "available",
     },
     landlord: {
       type: mongoose.Schema.Types.ObjectId,

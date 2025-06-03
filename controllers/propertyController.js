@@ -1,8 +1,85 @@
 const PROPERTY = require("../models/property");
+const cloudinary = require("cloudinary").v2;
 
 const createProperty = async (req, res) => {
-  res.send("create property");
+  const { userId } = req.user;
+  const {
+    title,
+    description,
+    location,
+    bedroom,
+    livingRoom,
+    kitchen,
+    toilet,
+    paymentPeriod,
+    price,
+  } = req.body;
+  if (
+    !title ||
+    !description ||
+    !location ||
+    !bedroom ||
+    !livingRoom ||
+    !kitchen ||
+    !toilet ||
+    !paymentPeriod ||
+    !price
+  ) {
+    return res.status(400).json({ message: "Please fill all fields" });
+  }
+  try {
+    //  handle images upload
+    let uploadedImages = [];
+    if (req.files?.images) {
+      const uploadPromises = req.files.images.map((image) =>
+        cloudinary.uploader.upload(image.tempFilePath, {
+          folder: "torii-gate/properties",
+          unique_filename: false,
+          use_filename: true,
+        })
+      );
+      const results = await Promise.all(uploadPromises);
+      uploadedImages = results.map((result) => result.secure_url);
+    }
+    // create property on the db
+    const property = await PROPERTY.create({
+      title,
+      description,
+      location,
+      bedroom,
+      livingRoom,
+      kitchen,
+      toilet,
+      paymentPeriod,
+      price,
+      images: uploadedImages, // store the uploaded image URLs
+      landlord: userId, // associate the property with the landlord
+    });
+    res.status(201).json({
+      success: true,
+      message: "Property created successfully",
+      property,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
 };
+
+const deleteProperty = async (req, res) => {
+  const { userId } = req.user;
+  const { propertyId } = req.params;
+  try {
+    await PROPERTY.findOneAndDelete({ landlord: userId, _id: propertyId });
+    res
+      .status(200)
+      .json({ success: true, message: "Property deleted successfully" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const getLandlordsProperties = async (req, res) => {
   const { userId } = req.user;
   const { page = 1 } = req.query;
@@ -140,4 +217,5 @@ module.exports = {
   updatePropertyAvailability,
   getAllProperties,
   getAProperty,
+  deleteProperty,
 };
